@@ -70,6 +70,7 @@ shall be implemented. Histograms of Oriented Gradients (HOG) is a method propose
 \\
 The idea behind HOG is to describe a local object's shape and appearance via a histogram of (binned) gradients. To detect objects (in our case the whole nose and its parts (i.e. callosities)) a sliding window is used to feed the gradient histograms into a classifier. A first design choice that has to be made is what kind of window should be used. In general, two reasonable choices are rectangular or circular windows. As in the given dataset whales are arbitrarily oriented for a first analysis a squared window shall be used for the sake of simplicity and may be compared later to a circular version if performance needs to be increased.
 \\
+\\
 In general histograms can be fed into any classifier. In their paper Dalal \& Triggs use a support vector machine (SVM) to detect humans which shall be used as a first approach for the whale nose and its callosities.
 \\
 \\
@@ -78,6 +79,7 @@ As in many pictures callosities resemble foam features, it is not feasible to de
 The callosity patches shall also be used to extract a feature vector (i.e. ellipses, roundness measures) that can be passed to POOF along the original patch.
 \\
 \\
+<<<<<<< HEAD
 To compute the gradient histograms as a first start VLFeat (\url{http://www.vlfeat.org/}) shall be used. For the SVM MATLAB's onboard implementation of the Statistics \& Machine Learning Toolbox shall be used as a starting point. To train the actual classifier first an adequate window size has to be determined in order to pass histograms to the classifier.
 
 \subsection*{Part II: Fine-grained Recognition [Nicolas]}
@@ -100,9 +102,9 @@ Then, we can implement the POOF method ase described in the section 3 of \cite{b
 
 \paragraph{Evaluation}
 
-We will test this method on the Kaggle competition which contains 500 different classes. The method enable a one-vs-all classification, which means that if we want to applys POOFs we need to compute $\binom{500}{2} = 124 750$ cases by part and base-feature. Instead, we will randomly chose a subset of 5000 parameters for each image: $(i,j,f,a,b)$, with i,j two classes, f and a two parts (one for alignement and the other for feature computation) and b one the two chosen low level features. For each set of parameters, we will extract the corresponding POOF score\\
+We will test this method on the Kaggle competition which contains 500 different classes. The method enable a one-vs-all classification, which means that if we want to applys POOFs we need to compute $\binom{500}{2} = 124 750$ cases by part and base-feature. Instead, we will randomly chose a subset of 5000 parameters for each image: $(i,j,f,a,b)$, with $i$,$j$ two classes, $f$ and a two parts (one for alignement and the other for feature computation) and b one the two chosen low level features. For each set of parameters, we will extract the corresponding POOF score\\
 
-Then we can rank the 500 whales species from highest to lowest response for each image and compute the accuray of our method. The baseline would be a random classifier. 
+Then we can rank the $500$ whales species from highest to lowest response for each image and compute the accuray of our method. The baseline would be a random classifier. 
 
 \paragraph{Improvement}
 
