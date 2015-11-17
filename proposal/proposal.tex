@@ -62,7 +62,7 @@ Once we come up with relevant features, we run a classifier on the training set.
 
 \section*{Implementation}
 In order to classify a whale, we split the work in two parts. The first part consists of localizing the nose, its parts and extracting a feature vector from it for additional precision. The second part deals with the actual classification which shall be done using a part-based one-vs-one features (POOF) approach. 
-\subsection*{Part I: Localizing the nose and parts of it}
+\subsection*{Part I: Localizing the nose and parts of it[Leonhard]}
 As mentioned in the introduction callosities and the shape or size of a head are main features to distinguish a whale from the others. In order to localize the nose and parts of it, an approach using histograms of gradients as described in \citep{dalal2005histograms}
 %\url{http://lear.inrialpes.fr/people/triggs/pubs/Dalal-cvpr05.pdf}
 shall be implemented. Histograms of Oriented Gradients (HOG) is a method proposed by Dalal \& Triggs in 2005 which has been used previously to detect humans in images. 
@@ -80,12 +80,12 @@ The callosity patches shall also be used to extract a feature vector (i.e. ellip
 \\
 To compute the gradient histograms as a first start VLFeat (\url{http://www.vlfeat.org/}) shall be used. For the SVM MATLAB's onboard implementation of the Statistics \& Machine Learning Toolbox shall be used as a starting point. To train the actual classifier first an adequate window size has to be determined in order to pass histograms to the classifier.
 
-\subsection*{Part II: Fine-grained Recognition}
+\subsection*{Part II: Fine-grained Recognition [Nicolas]}
 Once the whale has been detected inside the image, we restrict it to a small box surrounding the object. Now the goal is to recognize the whale, this belongs to the class recognition problem. We will mainly implement a successfull method of fine-grained recognition which enables to detect the most differentiating features from two different classes of the same object (here, object = whale and classe = specific whale).
 
 \paragraph{Objective}
 
-We chose to implement the POOF (Part-based one-vs-one features) algorithms to build these features which provide also a way for a one-vs-
+We chose to implement the POOF (Part-based one-vs-one features) algorithms to build these features which provide also a way for a one-vs-all classifier
 
 \paragraph{Method}
 
