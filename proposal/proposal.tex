@@ -6,6 +6,7 @@
 \usepackage{algorithm}
 \usepackage[toc,page]{appendix}
 \usepackage{lmodern}
+\usepackage{natbib}
 
 % Some useful macros.
 \newcommand{\given}{\,|\,}
@@ -58,10 +59,26 @@ On these pictures, we will extract features. Two approaches may be considered. O
 Once we come up with relevant features, we run a classifier on the training set. We will focus on the feature engineering part so we will probably use a classical classifier as for instance SVM or regularized logistic regression. 
 
 \section*{Implementation}
-In order to classify a whale, we split the work in two parts. The first part consists of localizing the nose, its parts and extracting a feature vector from it for additional precision (optional). The second part deals with the actual classification which shall be done using a part-based one-vs-one features (POOF) approach. 
-\section*{Part I: Localizing the nose and parts of it}
-As mentioned in the introduction callosities and shape / size of a head are main features to distinguish a whale from the others. In order to localize the nose and parts of it, an approach using HOG features as described in \url{http://lear.inrialpes.fr/people/triggs/pubs/Dalal-cvpr05.pdf} shall be implemented.   
-\section*{Part II: Part-based one-vs-one features}
+In order to classify a whale, we split the work in two parts. The first part consists of localizing the nose, its parts and extracting a feature vector from it for additional precision. The second part deals with the actual classification which shall be done using a part-based one-vs-one features (POOF) approach. 
+\subsection*{Part I: Localizing the nose and parts of it}
+As mentioned in the introduction callosities and the shape or size of a head are main features to distinguish a whale from the others. In order to localize the nose and parts of it, an approach using histograms of gradients as described in \citep{dalal2005histograms}
+%\url{http://lear.inrialpes.fr/people/triggs/pubs/Dalal-cvpr05.pdf}
+shall be implemented. Histograms of Oriented Gradients (HOG) is a method proposed by Dalal \& Triggs in 2005 which has been used previously to detect humans in images. 
+\\
+\\
+The idea behind HOG is to describe a local object's shape and appearance via a histogram of (binned) gradients. To detect objects (in our case the whole nose and its parts (i.e. callosities)) a sliding window is used to feed the gradient histograms into a classifier. A first design choice that has to be made is what kind of window should be used. In general, two reasonable choices are rectangular or circular windows. As in the given dataset whales are arbitrarily oriented for a first analysis a squared window shall be used for the sake of simplicity and may be compared later to a circular version if performance needs to be increased.
+\\
+In general histograms can be fed into any classifier. In their paper Dalal \& Triggs use a support vector machine (SVM) to detect humans which shall be used as a first approach for the whale nose and its callosities.
+\\
+\\
+As in many pictures callosities resemble foam features, it is not feasible to detect them with a sliding window over the whole original image. A better approach is to first use a larger sliding window to detect the actual nose part, extract a patch for it and perform then the HOG algorithm with a SVM again on this extracted patch to get callosity patches which can be fed into the POOF algorithm for whale classification.
+\\
+The callosity patches shall also be used to extract a feature vector (i.e. ellipses, roundness measures) that can be passed to POOF along the original patch.
+\\
+\\
+To compute the gradient histograms as a first start VLFeat (\url{http://www.vlfeat.org/}) shall be used. For the SVM MATLAB's onboard implementation of the Statistics \& Machine Learning Toolbox shall be used as a starting point. To train the actual classifier first an adequate window size has to be determined in order to pass histograms to the classifier.
+
+\subsection*{Part II: Part-based one-vs-one features}
 <TODO>
 
 \begin{appendices}
@@ -92,5 +109,8 @@ As mentioned in the introduction callosities and shape / size of a head are main
 \end{figure}
 
 \end{appendices}
+
+\bibliographystyle{unsrt}
+\bibliography{bibliography.bib}
 
 \end{document}
