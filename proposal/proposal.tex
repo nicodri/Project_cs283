@@ -7,6 +7,7 @@
 \usepackage[toc,page]{appendix}
 \usepackage{lmodern}
 \usepackage{amsmath}
+\usepackage{natbib}
 
 % Some useful macros.
 \newcommand{\given}{\,|\,}
@@ -30,7 +31,7 @@ Leonhard Spiegelberg}
 
 \section*{Introduction}
 
-Looking for an applied project, we decided to take part in a Kaggle competition: Right Whale Recognition! The objective of this competition is to build a program to recognize right whales in aerial photographies, given a training set with $500$ (North Atlantic) right whales. The dataset is constituted of $11,468$ aerial photographies with only one whale. Among these pictures, $4,545$ are already labeled with the ID of one of the 500 whales. The main characteristics which help to differentiate one whale from another are the white callosities (roughened patches of skin) on their head.\\
+Looking for an applied project, we decided to take part in a Kaggle competition: Right Whale Recognition! The objective of this competition is to build a program to recognize right whales in aerial photographies, given a training set with $500$ (North Atlantic) right whales. The dataset is constituted of $11,468$ aerial photographies with only one whale. Among these pictures, $4,545$ are already labeled with the ID of one of the $500$ whales. The main characteristics which help to differentiate one whale from another are the white callosities (roughened patches of skin) on their head.\\
 \\
 
 In this proposal, we first discuss some of the challenges of this problem and then present a potential roadmap to address this problem.
@@ -59,15 +60,34 @@ On these pictures, we will extract features. Two approaches may be considered. O
 Once we come up with relevant features, we run a classifier on the training set. We will focus on the feature engineering part so we will probably use a classical classifier as for instance SVM or regularized logistic regression. 
 
 
-\section*{Fine-grained Recognition}
+\section*{Implementation}
+In order to classify a whale, we split the work in two parts. The first part consists of localizing the nose, its parts and extracting a feature vector from it for additional precision. The second part deals with the actual classification which shall be done using a part-based one-vs-one features (POOF) approach. 
+\subsection*{Part I: Localizing the nose and parts of it}
+As mentioned in the introduction callosities and the shape or size of a head are main features to distinguish a whale from the others. In order to localize the nose and parts of it, an approach using histograms of gradients as described in \citep{dalal2005histograms}
+%\url{http://lear.inrialpes.fr/people/triggs/pubs/Dalal-cvpr05.pdf}
+shall be implemented. Histograms of Oriented Gradients (HOG) is a method proposed by Dalal \& Triggs in 2005 which has been used previously to detect humans in images. 
+\\
+\\
+The idea behind HOG is to describe a local object's shape and appearance via a histogram of (binned) gradients. To detect objects (in our case the whole nose and its parts (i.e. callosities)) a sliding window is used to feed the gradient histograms into a classifier. A first design choice that has to be made is what kind of window should be used. In general, two reasonable choices are rectangular or circular windows. As in the given dataset whales are arbitrarily oriented for a first analysis a squared window shall be used for the sake of simplicity and may be compared later to a circular version if performance needs to be increased.
+\\
+In general histograms can be fed into any classifier. In their paper Dalal \& Triggs use a support vector machine (SVM) to detect humans which shall be used as a first approach for the whale nose and its callosities.
+\\
+\\
+As in many pictures callosities resemble foam features, it is not feasible to detect them with a sliding window over the whole original image. A better approach is to first use a larger sliding window to detect the actual nose part, extract a patch for it and perform then the HOG algorithm with a SVM again on this extracted patch to get callosity patches which can be fed into the POOF algorithm for whale classification.
+\\
+The callosity patches shall also be used to extract a feature vector (i.e. ellipses, roundness measures) that can be passed to POOF along the original patch.
+\\
+\\
+To compute the gradient histograms as a first start VLFeat (\url{http://www.vlfeat.org/}) shall be used. For the SVM MATLAB's onboard implementation of the Statistics \& Machine Learning Toolbox shall be used as a starting point. To train the actual classifier first an adequate window size has to be determined in order to pass histograms to the classifier.
 
+\subsection*{Part II: Fine-grained Recognition}
 Once the whale has been detected inside the image, we restrict it to a small box surrounding the object. Now the goal is to recognize the whale, this belongs to the class recognition problem. We will mainly implement a successfull method of fine-grained recognition which enables to detect the most differentiating features from two different classes of the same object (here, object = whale and classe = specific whale).
 
-\subsection*{Objective}
+\paragraph{Objective}
 
 We chose to implement the POOF (Part-based one-vs-one features) algorithms to build these features which provide also a way for a one-vs-
 
-\subsection*{Method}
+\paragraph{Method}
 
 The method builds a one-vs-one feature to differentiate two given classes.
 If we consider two classes, the method need as input a labelled train set of images with part-based features, ie corresponding matches between each whale.\\
@@ -78,17 +98,17 @@ We also need a low level-feature which contains local information of the image. 
 
 Then, we can implement the POOF method ase described in the section 3 of REFFFFF.
 
-\subsection*{Evaluation}
+\paragraph{Evaluation}
 
 We will test this method on the Kaggle competition which contains 500 different classes. The method enable a one-vs-all classification, which means that if we want to applys POOFs we need to compute $\binom{500}{2} = 124 750$ cases by part and base-feature. Instead, we will randomly chose a subset of 5000 parameters for each image: $(i,j,f,a,b)$, with i,j two classes, f and a two parts (one for alignement and the other for feature computation) and b one the two chosen low level features. For each set of parameters, we will extract the corresponding POOF score\\
 
 Then we can rank the 500 whales species from highest to lowest response for each image and compute the accuray of our method. The baseline would be a random classifier. 
 
-\subsection*{Improvement}
+\paragraph{Improvement}
 
 One way to improve our method could be to implement a one-vs-most classifier. The main difference concerns the learning phase where we remove the most similar categories of the positive label. This method is described in REFERENCE. The similarity mapping can be computed through the POOFs as described in REFERENCE
 
-\subsection*{Other Approach}
+\paragraph{Other Approach}
 
 Another approach may be considered if there is time to compare it to this one. For example, in the paper REFF which provides an open-source version of their end-to-end deformable part descriptor implementation.
 
@@ -120,5 +140,8 @@ Another approach may be considered if there is time to compare it to this one. F
 \end{figure}
 
 \end{appendices}
+
+\bibliographystyle{unsrt}
+\bibliography{bibliography.bib}
 
 \end{document}
