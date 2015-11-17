@@ -96,7 +96,7 @@ The first question is how to build these part-based features. We will try the au
 
 We also need a low level-feature which contains local information of the image. We will both a gradient histogram feature (we will try the two variants used by Berg, gradhist and HOG) and a color histogram.\\
 
-Then, we can implement the POOF method ase described in the section 3 of REFFFFF.
+Then, we can implement the POOF method ase described in the section 3 of \cite{berg-poof-cvpr2013}.
 
 \paragraph{Evaluation}
 
@@ -106,11 +106,11 @@ Then we can rank the 500 whales species from highest to lowest response for each
 
 \paragraph{Improvement}
 
-One way to improve our method could be to implement a one-vs-most classifier. The main difference concerns the learning phase where we remove the most similar categories of the positive label. This method is described in REFERENCE. The similarity mapping can be computed through the POOFs as described in REFERENCE
+One way to improve our method could be to implement a one-vs-most classifier. The main difference concerns the learning phase where we remove the most similar categories of the positive label. This method is described in \citep{berg-birdsnap-cvpr2014}. The similarity mapping can be computed through the POOFs as described in \citep{berg-blackbird-iccv2013}.
 
 \paragraph{Other Approach}
 
-Another approach may be considered if there is time to compare it to this one. For example, in the paper REFF which provides an open-source version of their end-to-end deformable part descriptor implementation.
+Another approach may be considered if there is time to compare it to this one. For example, in the paper \cite{Zhang_2013_ICCV} which provides an open-source version of their end-to-end deformable part descriptor implementation.
 
 \begin{appendices}
 \chapter*{Whale Pictures}
