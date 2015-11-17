@@ -6,6 +6,7 @@
 \usepackage{algorithm}
 \usepackage[toc,page]{appendix}
 \usepackage{lmodern}
+\usepackage{amsmath}
 
 % Some useful macros.
 \newcommand{\given}{\,|\,}
@@ -56,6 +57,40 @@ On these pictures, we will extract features. Two approaches may be considered. O
     	\item Feature estimation for each segment (i.e. half axes of ellipses, roundness measures, ...)
 \end{enumerate}
 Once we come up with relevant features, we run a classifier on the training set. We will focus on the feature engineering part so we will probably use a classical classifier as for instance SVM or regularized logistic regression. 
+
+
+\section*{Fine-grained Recognition}
+
+Once the whale has been detected inside the image, we restrict it to a small box surrounding the object. Now the goal is to recognize the whale, this belongs to the class recognition problem. We will mainly implement a successfull method of fine-grained recognition which enables to detect the most differentiating features from two different classes of the same object (here, object = whale and classe = specific whale).
+
+\subsection*{Objective}
+
+We chose to implement the POOF (Part-based one-vs-one features) algorithms to build these features which provide also a way for a one-vs-
+
+\subsection*{Method}
+
+The method builds a one-vs-one feature to differentiate two given classes.
+If we consider two classes, the method need as input a labelled train set of images with part-based features, ie corresponding matches between each whale.\\
+
+The first question is how to build these part-based features. We will try the automation method SIFT to select a given set of corresponding points. We could also chose specific parts of the image and find them with a pixel matching method on each picture.\\
+
+We also need a low level-feature which contains local information of the image. We will both a gradient histogram feature (we will try the two variants used by Berg, gradhist and HOG) and a color histogram.\\
+
+Then, we can implement the POOF method ase described in the section 3 of REFFFFF.
+
+\subsection*{Evaluation}
+
+We will test this method on the Kaggle competition which contains 500 different classes. The method enable a one-vs-all classification, which means that if we want to applys POOFs we need to compute $\binom{500}{2} = 124 750$ cases by part and base-feature. Instead, we will randomly chose a subset of 5000 parameters for each image: $(i,j,f,a,b)$, with i,j two classes, f and a two parts (one for alignement and the other for feature computation) and b one the two chosen low level features. For each set of parameters, we will extract the corresponding POOF score\\
+
+Then we can rank the 500 whales species from highest to lowest response for each image and compute the accuray of our method. The baseline would be a random classifier. 
+
+\subsection*{Improvement}
+
+One way to improve our method could be to implement a one-vs-most classifier. The main difference concerns the learning phase where we remove the most similar categories of the positive label. This method is described in REFERENCE. The similarity mapping can be computed through the POOFs as described in REFERENCE
+
+\subsection*{Other Approach}
+
+Another approach may be considered if there is time to compare it to this one. For example, in the paper REFF which provides an open-source version of their end-to-end deformable part descriptor implementation.
 
 \begin{appendices}
 \chapter*{Whale Pictures}
