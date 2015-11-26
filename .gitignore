@@ -135,3 +135,6 @@ sympy-plots-for-*.tex/
 # WinEdt
 *.bak
 *.sav
+
+# cache folder
+cache/
