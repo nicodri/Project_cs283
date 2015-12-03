@@ -252,7 +252,7 @@ x,y,w,h,imw,imh,filename,absolutepath
 84,167,128,128,694,462,w_325_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_325_lq.jpg
 152,229,128,128,694,462,w_326_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_326_lq.jpg
 179,111,128,128,694,462,w_327_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_327_lq.jpg
-498,334,128,128,694,462,w_328_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_328_lq.jpg
+498,333,128,128,694,462,w_328_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_328_lq.jpg
 436,63,128,128,694,462,w_329_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_329_lq.jpg
 269,205,128,128,694,462,w_32_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_32_lq.jpg
 99,73,128,128,694,462,w_330_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_330_lq.jpg
@@ -350,9 +350,9 @@ x,y,w,h,imw,imh,filename,absolutepath
 194,101,128,128,694,462,w_413_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_413_lq.jpg
 190,267,128,128,694,462,w_414_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_414_lq.jpg
 34,58,128,128,694,462,w_415_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_415_lq.jpg
-203,334,128,128,694,462,w_416_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_416_lq.jpg
+203,333,128,128,694,462,w_416_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_416_lq.jpg
 101,231,128,128,694,462,w_417_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_417_lq.jpg
-137,334,128,128,694,462,w_418_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_418_lq.jpg
+137,333,128,128,694,462,w_418_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_418_lq.jpg
 95,92,128,128,694,462,w_419_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_419_lq.jpg
 336,316,128,128,694,462,w_41_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_41_lq.jpg
 410,80,128,128,694,462,w_420_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_420_lq.jpg
@@ -445,7 +445,7 @@ x,y,w,h,imw,imh,filename,absolutepath
 396,89,128,128,694,462,w_49_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_49_lq.jpg
 432,236,128,128,694,462,w_4_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_4_lq.jpg
 126,168,128,128,694,462,w_50_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_50_lq.jpg
-488,334,128,128,694,462,w_51_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_51_lq.jpg
+488,333,128,128,694,462,w_51_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_51_lq.jpg
 202,77,128,128,694,462,w_52_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_52_lq.jpg
 484,292,128,128,694,462,w_53_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_53_lq.jpg
 446,254,128,128,694,462,w_54_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_54_lq.jpg
@@ -474,7 +474,7 @@ x,y,w,h,imw,imh,filename,absolutepath
 128,133,128,128,694,462,w_75_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_75_lq.jpg
 470,237,128,128,694,462,w_76_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_76_lq.jpg
 189,73,128,128,694,462,w_77_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_77_lq.jpg
-566,2,128,128,694,462,w_78_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_78_lq.jpg
+565,2,128,128,694,462,w_78_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_78_lq.jpg
 479,317,128,128,694,462,w_79_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_79_lq.jpg
 410,305,128,128,694,462,w_7_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_7_lq.jpg
 131,239,128,128,694,462,w_80_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_80_lq.jpg
@@ -489,7 +489,7 @@ x,y,w,h,imw,imh,filename,absolutepath
 324,225,128,128,694,462,w_89_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_89_lq.jpg
 130,61,128,128,694,462,w_8_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_8_lq.jpg
 283,167,128,128,694,462,w_90_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_90_lq.jpg
-276,334,128,128,694,462,w_91_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_91_lq.jpg
+276,333,128,128,694,462,w_91_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_91_lq.jpg
 86,105,128,128,694,462,w_92_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_92_lq.jpg
 100,70,128,128,694,462,w_93_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_93_lq.jpg
 159,102,128,128,694,462,w_94_lq.jpg,/Users/LeonhardS/Documents/CSE/courses/CS283_Computer_Vision/Project/Project_cs283/cache/lq/w_94_lq.jpg

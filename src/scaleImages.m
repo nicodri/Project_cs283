@@ -16,6 +16,8 @@ im_sizes = [];
 for i=1:im_range
     file = filenames{i};
     
+    disp(['processing ', file,  ' (', num2str(i), '/', num2str(im_range),') ...'])
+    
     Im = imread(strcat(images_path, filesep, file));
     
     % resize to 1/4 of original size
