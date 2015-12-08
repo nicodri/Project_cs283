@@ -1,18 +1,14 @@
-function [w] = trainSVMModel(csvfile, image_path, hogCellSize, C, epsilon)
+function [w] = trainSVMModel(data, image_path, hogCellSize, C, epsilon)
 %TRAINSVMMODEL trains an SVM model and returns kernel for classification
 
-% step 1: load training data
-[trainImages, trainBoxes, trainBoxImages, trainBoxPatches] = ...
-    loadTrainData(csvfile, image_path);
-
-% step 2: compute hog features via VLfeat
+% step 1: compute hog features via VLfeat
 trainHog = {};
-for i = 1:size(trainBoxPatches, 4)
-  trainHog{i} = vl_hog(trainBoxPatches(:, :, :, i), hogCellSize);
+for i = 1:size(data.trainBoxPatches, 4)
+  trainHog{i} = vl_hog(data.trainBoxPatches(:, :, :, i), hogCellSize);
 end
 trainHog = cat(4, trainHog{:});
 
-% step 3: get positive / negative samples
+% step 2: get positive / negative samples
 % positive samples are given by data
 pos = trainHog;
 
@@ -20,16 +16,16 @@ pos = trainHog;
 % (take the same amount like positive samples!)
 neg = [];
 
-multiplier = 8;
+multiplier = 3;
 % generate one neg sample per image
-for i=1:length(trainImages)
-    Im = im2single(imread(strcat(image_path, filesep, trainImages{i})));
+for i=1:length(data.trainImages)
+    Im = im2single(imread(strcat(image_path, filesep, data.trainImages{i})));
     for j=1:multiplier
-        neg(:, :, :, (i - 1) * multiplier + j) = vl_hog(sampleNegative(Im, trainBoxes(:, i)), hogCellSize);
+        neg(:, :, :, i * multiplier + j) = vl_hog(sampleNegative(Im, data.trainBoxes(:, i)), hogCellSize);
     end
 end
 
-% step 4: Train a SVM
+% step 3: Train a SVM
 % Pack the data into a matrix with one datum per column
 numPos = size(pos, 4);
 numNeg = size(neg, 4);
@@ -43,7 +39,7 @@ lambda = 1 / (C * (numPos + numNeg));
 % Learn the SVM using an SVM solver
 w = vl_svmtrain(x, y, lambda, 'epsilon', epsilon, 'verbose');%, 'MaxNumIterations', 5000);
 
-% step 5:
+% step 4:
 % reshape into 2D kernel
 w = single(reshape(w, size(trainHog, 2), size(trainHog, 1), [])) ;
 end

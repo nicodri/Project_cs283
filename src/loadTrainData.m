@@ -1,4 +1,4 @@
-function [trainImages, trainBoxes, trainBoxImages, trainBoxPatches] = loadTrainData(csvfile, images_path)
+function [data_struct] = loadTrainData(csvfile, images_path)
 %LOADTRAINDATA 
 % trainImages: a list of train image names.
 % trainBoxes: a 4×N array of object bounding boxes, in the form [xmin,ymin,xmax,ymax].
@@ -23,7 +23,7 @@ while ischar(tline)
         % convert [x, y, w, h] to [xmin. ymin, xmax, ymax]
         % and add +1 to convert between 0adressed and 1adressed
         % coords
-        coords = int32([M{1}, M{2}, M{1} + M{3}, M{2} + M{4}] + 1);
+        coords = int32([M{1}+1, M{2}+1, M{1} + M{3}, M{2} + M{4}]);
         file = M{7};
         file = file{1};
         
@@ -45,5 +45,11 @@ fclose(fid);
 trainBoxes = trainBoxes';
 trainBoxPatches = single(trainBoxPatches);
 
+
+% return as struct object
+data_struct = struct('trainImages', {trainImages},...
+    'trainBoxes', trainBoxes,...
+    'trainBoxImages', {trainBoxImages},...
+    'trainBoxPatches', trainBoxPatches);
 end
 
