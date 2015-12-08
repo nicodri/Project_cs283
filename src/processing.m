@@ -1,11 +1,13 @@
 % author_name = Nicolas Drizard
 % Processing
 
+% Test of different features extractor on the whales dataset
+
 % Loading two images
-%Ia=single(rgb2gray(imread('heads/whale_08017/w_1106.jpg')));
-Ia=rgb2gray(imread('heads/whale_08017/w_6177.jpg'));
-%Ib=single(rgb2gray(imread('heads/whale_26288/w_266.jpg')));
-Ib=rgb2gray(imread('heads/whale_26288/w_4394.jpg'));
+Ia=single(rgb2gray(imread('heads/whale_08017/w_1106.jpg')));
+% Ia=rgb2gray(imread('heads/whale_08017/w_6177.jpg'));
+Ib=single(rgb2gray(imread('heads/whale_26288/w_266.jpg')));
+% Ib=rgb2gray(imread('heads/whale_26288/w_4394.jpg'));
 
 
 %%
