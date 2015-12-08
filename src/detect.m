@@ -20,6 +20,7 @@ modelHeight = size(w, 1);
 % return bb with 0.5 offset for matlab
 bb = [x;y;x + hogCellSize * modelWidth;y + hogCellSize * modelHeight] - 0.5;
 
+% use the second largest values!
 % make sure, box lies withhin image boundaries!
 if bb(1) < 0.5 || bb(2) < 0.5 || bb(3) > size(Im, 2) - 0.5 || bb(4) > size(Im, 1) - 0.5
     % correct bounding box, to make up for arbitrary images
