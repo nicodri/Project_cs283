@@ -18,14 +18,14 @@ headerlinesIn = 0;
 
 % Images
 
-filename = 'whales/images.txt';
+filename = '../whales/images.txt';
 % format is (file, name)
 images = importdata(filename);
 N = size(images,1);
 
 %Image class
 
-filename = 'whales/image_class_labels.txt';
+filename = '../whales/image_class_labels.txt';
 % format is (img_id, class_id)
 img_class = importdata(filename,delimiterIn,headerlinesIn);
 
@@ -40,7 +40,7 @@ bounding_boxes = [img_class(:, 1), o, o, tot, tot];
 
 % Parts location
 
-filename = 'whales/part_locs.txt';
+filename = '../whales/part_locs.txt';
 % format is (img_id, part_id, x, y, visible)
 part_locs = importdata(filename,delimiterIn,headerlinesIn);
 
@@ -49,14 +49,19 @@ part_locs = importdata(filename,delimiterIn,headerlinesIn);
 %filename = 'CUB_200_2011/CUB_200_2011/train_test_split.txt';
 % format is (img_id, is training)
 
+% Import the current training
+part_locs = importdata('../whales/training.txt',delimiterIn,headerlinesIn);
 % Manual building for the moment, dividing the two classes in half
-training = zeros(size(img_class, 1), 2);
-training(:, 1) = img_class(:, 1);
-for i=1:2
-    class_i = find(img_class(:, 2) == i);
-    train_i = datasample(class_i,int16(size(class_i, 1)/2), 'replace', false);
-    training(train_i, 2)=1;
-end
+% training = zeros(size(img_class, 1), 2);
+% training(:, 1) = img_class(:, 1);
+% for i=1:4
+%     class_i = find(img_class(:, 2) == i);
+%     train_i = datasample(class_i,int16(size(class_i, 1)/2), 'replace', false);
+%     training(train_i, 2)=1;
+% end
+% % Saving array
+% dlmwrite('whales/training.txt', img_part, delimiterIn);
+
 
 % Formating images id
 images_clean = cellfun(@(s) strsplit(s, delimiterIn), images, 'UniformOutput', false);

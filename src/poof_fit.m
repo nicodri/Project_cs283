@@ -40,7 +40,7 @@ function [svm_mask, poof_svm] = poof_fit(i, j, f, a, tiles, folderpath,...
     % local_indices: indices for rows where both f and a visible
     % img_croped: contain only images where both f and a are visible
     [parts_f, parts_a, local_indices] = retrieve_parts(img_part, f, a, gid2lid);
-    img_croped = standardize_imgs(img, parts_f, parts_a, local_indices);
+    img_croped = standardize_imgs(img, parts_f, parts_a, local_indices, plots);
     % Binary class for the one-vs-one classifier
     outputs = (classes_train(local_indices, 2) == i);
     
@@ -59,6 +59,17 @@ function [svm_mask, poof_svm] = poof_fit(i, j, f, a, tiles, folderpath,...
     %
     %   plots: Last argument use for sanity plot if True
     hog_tile  = retrieve_hog_features(tiles, img_croped, plots);
+    
+    % Color histogram
+%     color_tile = cell(N_tiles,1);
+%     for t=1:N_tiles
+%         tile = tiles(t);
+%         for k=1:size(img_croped, 1)
+%             im = img_croped{k,1};
+%             im_r = reshape(im, [numel(im) 1]);
+%             
+%         end
+%     end
 
     % TO DO: Plot hog features
 
@@ -80,6 +91,8 @@ function [svm_mask, poof_svm] = poof_fit(i, j, f, a, tiles, folderpath,...
 
     % svm_thresh cell array with the mask of the cells above the threshold
     svm_thresh = cell(N_tiles, 1);
+    % Store the mask to plot
+    mask_plot = cell(N_tiles, 1);
     for t=1:N_tiles
         tile = tiles(t,1);
         % Dimension of the grid cell for the current tile
@@ -89,10 +102,25 @@ function [svm_mask, poof_svm] = poof_fit(i, j, f, a, tiles, folderpath,...
         beta = svm.Beta;
         % Keep the max weight for each cell
         mask = max(reshape(beta, [dim_x, dim_y, 31]), [], 3);
+        mask_plot{t, 1} = mask;
         % Median thresholding
         med = median(reshape(mask, [numel(mask) 1]));
         mask(mask < med) = 0;
         svm_thresh{t,1} = mask;
+    end
+    
+    % Sanity check of weights
+    if plots
+        figure;
+        for t=1:N_tiles
+            m = mask_plot{t, 1};
+            m = (m - min(min(m)))./(max(max(m)) - min(min(m)));
+            subplot(N_tiles, 1, t);
+            colormap('hot')
+            imagesc(m)
+            colorbar
+            hold on;
+        end
     end
 
     % %% Step 5: Finding the maximum connected components around f in the mask
@@ -106,7 +134,8 @@ function [svm_mask, poof_svm] = poof_fit(i, j, f, a, tiles, folderpath,...
     svm_mask = cell(N_tiles, 1);
     for t=1:size(tiles,1)
         mask = svm_thresh{t,1};
-        cc = bwconncomp(mask);
+        % We look for the 4-connected neighborhood
+        cc = bwconncomp(mask, 4);
         pix = cc.PixelIdxList;
         % Initialisation
         found = 0;
@@ -132,8 +161,50 @@ function [svm_mask, poof_svm] = poof_fit(i, j, f, a, tiles, folderpath,...
         svm_mask{t,1} = cc_tile;   
     end
 
-    % TO DO: Plot connected components
-    
+    % Sanity check of connected components
+    if plots
+        figure;
+        for t=1:N_tiles
+            mask = svm_mask{t, 1};
+            tile = tiles(t);
+            % Need to find the corresponding mask on the image pixels
+            mask2img = [];
+            dim_x = 64 / tile;
+            dim_y = 128 / tile;
+            for j=1:size(mask,1)
+                m = mask(j);
+                q = floor((m - 1)/dim_x);
+                r = mod(m-1, dim_x);
+                % upper left element of the current box of mask
+                a = tile*r + 64*tile*q;
+                % Loop over all the pixels of the boxes
+                for w=1:tile
+                    for z=1:tile
+                        mask2img = [mask2img; a + z + (w-1)*64];
+                    end
+                end
+            end
+            im_i = img_croped{6,1};
+            show_i = zeros(size(im_i, 1), size(im_i, 2), 3);
+            im_j = img_croped{size(img_croped, 1) - 1,1};
+            show_j = zeros(size(im_j, 1), size(im_j, 2), 3);
+            [I, J] = ind2sub([size(im_i, 1), size(im_i, 2)], sort(mask2img));
+            % Changing the cells value
+            for s=1:size(I, 1)
+                show_i(I(s), J(s), :) = im_i(I(s), J(s), :);
+                show_j(I(s), J(s), :) = im_j(I(s), J(s), :);
+            end
+            % Image i
+            subplot(N_tiles, 2, 1 + (t-1)*2);
+            imshow(uint8(show_i));
+            hold on;
+            % Image j
+            subplot(N_tiles, 2, 2 + (t-1)*2);
+            imshow(uint8(show_j));
+            hold on;
+        end
+    end
+ 
     % %% Step 6: Building the SVM which computes the Poof score
 
     % Features to learn the SVM
@@ -142,6 +213,36 @@ function [svm_mask, poof_svm] = poof_fit(i, j, f, a, tiles, folderpath,...
     % Run a svm on the features
     if size(poof_features) > 0
         poof_svm = fitcsvm(poof_features, outputs, 'KernelFunction', 'linear');
+        % Sanity check of the feature weights
+        if plots
+            figure;
+            % counter to start the number of features
+            start_cursor = 1;
+            beta = poof_svm.Beta;
+            for t=1:N_tiles
+                mask = svm_mask{t, 1};
+                tile = tiles(t);
+                % Dimension of the grid cell for the current tile
+                dim_x = 64 / tile;
+                dim_y = 128 / tile;
+                % Compute the number of features of the current tile
+                end_cursor = size(mask,1)*31;
+                beta_curr = beta(start_cursor:end_cursor);
+                % Defining the weighted mask (we keep the max weight for each
+                % cell)
+                weighted_mask = zeros(dim_x, dim_y);
+                % Number of pixel in the current mask
+                number_pixels = size(beta_curr,1)/31;
+                weighted_mask(mask) = max(reshape(beta_curr, [number_pixels, 31]), [], 2);
+                % Scaling the weights
+                weighted_mask = (weighted_mask - min(min(weighted_mask)))./(max(max(weighted_mask)) - min(min(weighted_mask)));
+                subplot(N_tiles, 1, t);
+                colormap('hot')
+                imagesc(weighted_mask)
+                colorbar
+                hold on;
+            end
+        end
     else
         poof_svm = 0;
     end

@@ -4,11 +4,13 @@
 % Test of different features extractor on the whales dataset
 
 % Loading two images
-Ia=single(rgb2gray(imread('heads/whale_08017/w_1106.jpg')));
-% Ia=rgb2gray(imread('heads/whale_08017/w_6177.jpg'));
-Ib=single(rgb2gray(imread('heads/whale_26288/w_266.jpg')));
-% Ib=rgb2gray(imread('heads/whale_26288/w_4394.jpg'));
-
+% Ia=single(rgb2gray(imread('../heads/whale_08017/w_1106.jpg')));
+% Ia=rgb2gray(imread('../heads/whale_08017/w_6177.jpg'));
+Ia=rgb2gray(imread('../heads/whale_24458/w_2071.jpg'));
+% Ib=single(rgb2gray(imread('../heads/whale_26288/w_266.jpg')));
+% Ib=rgb2gray(imread('../heads/whale_26288/w_4394.jpg'));
+% Ib=rgb2gray(imread('../heads/whale_24458/w_8551.jpg'));
+Ib=rgb2gray(imread('../heads/whale_24458/w_4963.jpg'));
 
 %%
 % SIFT descriptor
@@ -55,12 +57,12 @@ hb=vl_plotframe(fb);
 % Computer Vision Toolbox
 
 % HARRIS features: Find the corners
-% pointsa = detectHarrisFeatures(Ia);
-% pointsb = detectHarrisFeatures(Ib);
+pointsa = detectHarrisFeatures(Ia);
+pointsb = detectHarrisFeatures(Ib);
 
 % SURF features
-pointsa = detectBRISKFeatures(Ia);
-pointsb = detectBRISKFeatures(Ib);
+% pointsa = detectBRISKFeatures(Ia);
+% pointsb = detectBRISKFeatures(Ib);
 
 % Extract the neighborhood features
 [featuresa, valid_pointsa] = extractFeatures(Ia, pointsa);

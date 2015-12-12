@@ -10,15 +10,15 @@ run /Users/nicolasdrizard/vlfeat-0.9.20/toolbox/vl_setup.m
 
 % Folder path with the CUB 200-2011 data
 % Birds case
-% folderpath = 'CUB_200_2011/CUB_200_2011/images/';
+folderpath = '../CUB_200_2011/CUB_200_2011/images/';
 % Whales case
-folderpath = 'heads/';
+% folderpath = 'heads/';
 
 % Tiles number
 tiles = [8; 16];
 
 % Verbose for plots
-plots = 1;
+plots = 0;
 
 % Loading the data
 % Expected format inside:
@@ -30,21 +30,22 @@ plots = 1;
 % 'training': [global_img_id, training (boolean)]
 
 % Case birds
-% load('imgs_data.mat');
+load('imgs_data.mat');
 
 % Case whales
-load('imgs_whales.mat');
+% load('imgs_whales.mat');
 
 %% Fit the Poof on train data
 
 % First test on 3 classes and 3 pixel location
+classes = [1 2 3 4];
+parts = [1 2 3 4 5 6 14];
+
 % Classes
-classes = [1 2];
 n_classes = size(classes, 2);
 i_j = nchoosek(classes, 2);
 n_combin_classes = size(i_j, 1); 
 % Parts
-parts = [1 2 3];
 n_parts = size(parts, 2);
 f_a = vertcat(nchoosek(parts, 2), nchoosek(fliplr(parts), 2));
 n_combin_parts = size(f_a, 1);
@@ -115,7 +116,7 @@ for k=1:n_combin_classes
         
         % Local indices = local indices where f AND a visible
         [parts_f, parts_a, local_indices] = retrieve_parts(img_part, f, a, gid2lid);
-        img_croped = standardize_imgs(img, parts_f, parts_a, local_indices);
+        img_croped = standardize_imgs(img, parts_f, parts_a, local_indices, plots);
         % Increasing the counter of visible features in the visible column
         % of dataset
         dataset(local_indices, 4) = dataset(local_indices, 4) + 1;
@@ -144,12 +145,28 @@ end
 
 % Building n_classes one-vs-all SVM on the poof features from dataset
 % Results stored in 
-% classification : [global_id, training, class, # visible, predicted class, SVM)
+% classification : [global_id, training, class, # visible, predicted class,
+% SVM on Poof]
 % SVM column stores classifier response in the order of classes array
 
 classification = zeros(sum(img_selected), 5 + n_classes);
 classification(:, 1:4) = dataset(:, 1:4);
-% TO DO: handling missing value case
+% 
+% % Baseline dataset format: [global_id, training, class, HOG features
+% % concatenated over tiles]
+% baseline_dataset = zeros(sum(img_selected), 4);
+% baseline_dataset(:, 1:3) = dataset(:, 1:3);
+% % Baseline classification  format: [global_id, training, class,  class
+% % predicted, SVM on HOG features concatenated over tiles]
+% baseline_classification = zeros(sum(img_selected), 4 + n_classes);
+% baseline_classification(:, 1:3) = dataset(:, 1:3);
+
+% Retrieving the features for the naive HOG classifier
+% hog_tile_baseline  = retrieve_hog_features(tiles, img, plots);
+% for t=1:size(tiles,1)
+%     baseline_dataset = [baseline_dataset hog_tile_baseline{t, 1}];
+% end
+
 % Selection of images with all parts visible only
 img_to_classify = (classification(:, 4) == n_poof);
 img_to_classify_train = (img_to_classify & classification(:, 2) == 1);
@@ -162,12 +179,18 @@ for k=1:n_classes
     outputs = (classification(img_to_classify_train, 3) == c);
     svm = fitcsvm(dataset(img_to_classify_train, 5:end),...
         outputs, 'KernelFunction', 'linear');
+    % Naive HOG classifier
+%     svm_baseline = fitcsvm(baseline_dataset(img_to_classify_train, 4:end),...
+%         outputs, 'KernelFunction', 'linear');
     % Filling the array starting at cell 6 (5 is kept for the prediction
     classification(img_to_classify,5+k) = svm.Bias + ...
         dataset(img_to_classify, 5:end)*svm.Beta;
+    % Baseline
+%     baseline_classification(img_to_classify,4+k) = svm_baseline.Bias + ...
+%         baseline_dataset(img_to_classify, 4:end)*svm_baseline.Beta;
 end
 
-%% Classifier where one part not visible
+% Classifier where one part not visible
 
 % To store the total classified entries
 img_classified = img_to_classify;
@@ -204,6 +227,9 @@ end
 % Computing the predicted class, as highest classifier's score
 [sortedValues, sortedIndexes] = sort(classification(img_classified, 6:end), 2, 'descend');
 classification(img_classified, 5) = classes(sortedIndexes(:, 1));
+% Baseline
+% [sortedValues, sortedIndexes] = sort(baseline_classification(img_classified, 5:end), 2, 'descend');
+% baseline_classification(img_classified, 4) = classes(sortedIndexes(:, 1));
 
 % Display results about the classification
 n_classified = sum(img_classified);
@@ -211,12 +237,14 @@ n_train = sum(img_classified_train);
 n_test = sum(img_classified_test);
 accuracy_train = sum(classification(img_classified_train, 3) == classification(img_classified_train, 5)) / n_train;
 accuracy_test= sum(classification(img_classified_test, 3) == classification(img_classified_test, 5)) / n_test;
+% baseline_accuracy_test= sum(baseline_classification(img_classified_test, 3) == baseline_classification(img_classified_test, 4)) / n_test;
 
 fprintf(['Classes are : ',mat2str(classes),' . Parts are: ',mat2str(parts), ' \n']);
 fprintf('Num total of images: %d . Num total of images classified: %d \n', size(dataset, 1), n_classified);
 fprintf('Training one-vs-all SVM for %d classes with %d parts on %d train images for %d test images \n', n_classes, n_parts, n_train, n_test);
 fprintf('Accuracy on train is: %d \n', accuracy_train);
 fprintf('Accuracy on test is: %d \n', accuracy_test);
+% fprintf('Accuracy of the baseline on test is: %d \n', baseline_accuracy_test);
 
 
 %% Baseline computation

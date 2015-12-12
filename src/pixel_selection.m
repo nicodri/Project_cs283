@@ -5,7 +5,8 @@
 
 % Ref repository
 filefolder = 'heads/';
-delimiterIn = ' '; 
+delimiterIn = ' ';
+headerlinesIn = 0;
 
 % Loading the data
 load('imgs_whales.mat');
@@ -13,13 +14,16 @@ load('imgs_whales.mat');
 % Pixel selection
 N_tot = size(images_id, 1);
 
-% First test on 2 classes
-N = 53;
+% Loading the already filled file
+filename = 'whales/part_locs.txt';
+% img_part = importdata(filename,delimiterIn,headerlinesIn);
+
 
 % Format should be (img_id, part_id, x, y, visible)
 %img_part = zeros(6*N, 5);
 
-for i=46:N
+% Reaching 4 classes
+for i=77:107
     filename = strcat(filefolder, images_id{i, 2});
     im = imread(filename);
     imshow(im);
