@@ -1,3 +1,9 @@
+# ignore stats files
+statistics*.txt
+*.ipynb_checkpoints
+*.ipynb
+images/
+
 .DS_Store
 ## Core latex/pdflatex auxiliary files:
 *.aux

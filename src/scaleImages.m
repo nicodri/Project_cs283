@@ -1,8 +1,7 @@
-% (c) 2015 by L.Spiegelberg, N.Drizard
+% (c) 2015 by L.Spiegelberg
+% this script scales down data to alower (25%) resolution
 
-% test script to display images
-
-images_path = strcat('..', filesep, 'cache', filesep, 'imgs_subset');
+images_path = strcat('..', filesep, 'cache', filesep, 'images501_1000');
 cache_path = strcat('..', filesep, 'cache');
 filenames = getFilenames(images_path);
 
@@ -28,10 +27,11 @@ for i=1:im_range
     Im = imresize(Im, [462, 694]); 
     
     % normalize Image's contrast
-    Im = ContrastStretchNorm(im2double(Im));
+    %Im = ContrastStretchNorm(im2double(Im));
+    Im = normalizeImage(im2double(Im));
     
     % write image to cache
-    imwrite(Im, strcat(cache_path, filesep, 'lq', filesep, getFilename(file), '_lq.jpg')); 
+    imwrite(Im, strcat(cache_path, filesep, 'lq501_1000', filesep, getFilename(file), '_lq.jpg')); 
     
     im_sizes = [im_sizes;size(Im)];
     

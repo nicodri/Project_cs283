@@ -8,6 +8,7 @@ topX = 5;
 
 % this is the worst according to the given model
 sample_image_index = 402;
+sample_image_index = 100;
 figure
 set(gcf, 'Color', 'w')
 
@@ -17,8 +18,8 @@ alpha 1
 hold on
 
 % compute scores and plot them on top
-hog = vl_hog(Im, hogCellSize) ;
-scores = vl_nnconv(hog, w, []) ;
+hog = vl_hog(Im, hogCellSize);
+scores = vl_nnconv(hog, w, []);
 imagesc([.5 *size(w, 1) * hogCellSize, size(Im, 2)- .5 *size(w, 1) * hogCellSize] -.5,...
     [.5 *size(w, 1) * hogCellSize, size(Im, 1)- .5 *size(w, 1) * hogCellSize]-.5, scores);
 imshow(Im);
@@ -30,16 +31,16 @@ hold on
 plotBBox(detected_bb, 'r')
 vl_plotbox(double(data.trainBoxes(:, sample_image_index))-0.5, 'g')
 
-[~, bestIndex] = sort(scores(:), 'descend');
-bestIndex = bestIndex(1:topX); % top X entries!
-[hy, hx] = ind2sub(size(scores), bestIndex);
-x = (hx - 1) * hogCellSize + 1;
-y = (hy - 1) * hogCellSize + 1;
-scatter(x, y, 'rx');
-
-% plot box for second largest entry
-bb = [x(2), y(2), x(2) + hogCellSize * size(w, 1), y(2) + hogCellSize * size(w, 2)]';
-plotBBox(bb, 'k');
-
-colorbar
+% [~, bestIndex] = sort(scores(:), 'descend');
+% bestIndex = bestIndex(1:topX); % top X entries!
+% [hy, hx] = ind2sub(size(scores), bestIndex);
+% x = (hx - 1) * hogCellSize + 1;
+% y = (hy - 1) * hogCellSize + 1;
+% scatter(x, y, 'rx');
+% 
+% % plot box for second largest entry
+% bb = [x(2), y(2), x(2) + hogCellSize * size(w, 1), y(2) + hogCellSize * size(w, 2)]';
+% plotBBox(bb, 'k');
+% 
+% colorbar
 axis on

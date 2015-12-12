@@ -19,7 +19,11 @@ while ~done && cnt < maxcnt
     
     % not equal to bounding box? => take as negative sample!
     % condition will be met almost certainly...
-    if xmin ~= pos_bounding_box(1) && ymin ~= pos_bounding_box(3)
+    %if xmin ~= pos_bounding_box(1) && ymin ~= pos_bounding_box(2)
+    % make sure that there is no overlapping!
+    if xmin + bb_w < pos_bounding_box(1) || ymin + bb_h < pos_bounding_box(2) || ...
+       xmin > pos_bounding_box(3) || ymin  > pos_bounding_box(4)
+            
         Im_sample = Im(xmin:xmin + bb_w, ymin:ymin + bb_h, :);
         break
     end

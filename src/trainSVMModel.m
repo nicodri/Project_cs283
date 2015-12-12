@@ -1,4 +1,4 @@
-function [w] = trainSVMModel(data, image_path, hogCellSize, C, epsilon)
+function [w] = trainSVMModel(data, image_path, hogCellSize, C, epsilon, multiplier)
 %TRAINSVMMODEL trains an SVM model and returns kernel for classification
 
 % step 1: compute hog features via VLfeat
@@ -15,13 +15,24 @@ pos = trainHog;
 % to get negative samples, sample them uniformly from the images!
 % (take the same amount like positive samples!)
 neg = [];
+if nargin < 6
+   multiplier = 1;
+end
 
-multiplier = 3;
+npos = size(pos, 4) + 1;
+
+
 % generate one neg sample per image
 for i=1:length(data.trainImages)
     Im = im2single(imread(strcat(image_path, filesep, data.trainImages{i})));
     for j=1:multiplier
         neg(:, :, :, i * multiplier + j) = vl_hog(sampleNegative(Im, data.trainBoxes(:, i)), hogCellSize);
+    
+        % get also more positive samples!
+        if j > 1
+            pos(:, :, :, npos) = vl_hog(samplePositive(Im, data.trainBoxes(:, i)), hogCellSize);
+            npos = npos + 1;
+        end
     end
 end
 
